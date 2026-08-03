@@ -73,3 +73,57 @@ window.sendReport = async function(){
     loadReports();
 
 }
+// =========================
+// عرض البلاغات
+// =========================
+
+async function loadReports(){
+
+    const reports = document.getElementById("reports");
+
+    reports.innerHTML = "جاري التحميل...";
+
+    const q = query(
+        collection(db,"reports"),
+        orderBy("date","desc")
+    );
+
+    const snap = await getDocs(q);
+
+    reports.innerHTML = "";
+
+    snap.forEach((report)=>{
+
+        const data = report.data();
+
+        reports.innerHTML += `
+        <div class="report">
+
+            <h3>📍 ${data.delegation}</h3>
+
+            <p>${data.details}</p>
+
+            <small>👤 ${data.name}</small>
+
+            <br><br>
+
+            <button onclick="deleteReport('${report.id}')">
+                🗑️ حذف البلاغ
+            </button>
+
+        </div>
+
+        <hr>
+        `;
+
+    });
+
+}
+
+window.deleteReport = async function(id){
+
+    const password = prompt("أدخل كلمة السر");
+
+    if(password !== "Tataouine2025"){
+
+        alert("❌ كلمة السر غير صحيحة
