@@ -1,99 +1,90 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-query,
-orderBy
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBJ1ayE2j6QcnhNkS-yJ8W3H7B3UpH5UHA",
+  apiKey: "YOUR_API_KEY",
   authDomain: "balagh-maa-tataouine.firebaseapp.com",
   projectId: "balagh-maa-tataouine",
   storageBucket: "balagh-maa-tataouine.firebasestorage.app",
   messagingSenderId: "511775432495",
-  appId: "1:511775432495:web:a8c440db80eba59dd40bda",
-  measurementId: "G-ZYNNL1XLC3"
+  appId: "1:511775432495:web:a8c440db80eba59dd40bda"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.sendReport = async function(){
+window.sendReport = async () => {
 
-const name = document.getElementById("name").value.trim();
-const delegation = document.getElementById("delegation").value;
-const details = document.getElementById("details").value.trim();
+    const name = document.getElementById("name").value.trim();
+    const delegation = document.getElementById("delegation").value;
+    const details = document.getElementById("details").value.trim();
 
-if(name==="" || details===""){
-alert("يرجى ملء الاسم والبلاغ");
-return;
-}
+    if (!name || !details) {
+        alert("يرجى ملء جميع الخانات");
+        return;
+    }
 
-try{
+    try {
 
-await addDoc(collection(db,"reports"),{
+        await addDoc(collection(db, "reports"), {
+            name,
+            delegation,
+            details,
+            date: Date.now()
+        });
 
-name:name,
-delegation:delegation,
-details:details,
-date:Date.now()
+        alert("✅ تم إرسال البلاغ");
 
-});
+        document.getElementById("name").value = "";
+        document.getElementById("details").value = "";
 
-alert("✅ تم إرسال البلاغ");
+        loadReports();
 
-document.getElementById("name").value="";
-document.getElementById("details").value="";
+    } catch (e) {
 
-loadReports();
+        console.error(e);
+        alert(e.message);
 
-}catch(e){
+    }
 
-console.error(e);
-alert("حدث خطأ أثناء الإرسال");
+};
 
-}
+async function loadReports() {
 
-}
+    const reports = document.getElementById("reports");
 
-async function loadReports(){
+    reports.innerHTML = "جاري التحميل...";
 
-const reports=document.getElementById("reports");
+    const q = query(
+        collection(db, "reports"),
+        orderBy("date", "desc")
+    );
 
-reports.innerHTML="<p>جاري تحميل البلاغات...</p>";
+    const snap = await getDocs(q);
 
-const q=query(
-collection(db,"reports"),
-orderBy("date","desc")
-);
+    reports.innerHTML = "";
 
-const snapshot=await getDocs(q);
+    snap.forEach(doc => {
 
-reports.innerHTML="";
+        const data = doc.data();
 
-snapshot.forEach((doc)=>{
+        reports.innerHTML += `
+        <div class="report">
+            <h3>📍 ${data.delegation}</h3>
+            <p>${data.details}</p>
+            <small>👤 ${data.name}</small>
+        </div>
+        `;
 
-const data=doc.data();
-
-reports.innerHTML+=`
-
-<div class="report">
-
-<h3>📍 ${data.delegation}</h3>
-
-<p>${data.details}</p>
-
-<small>👤 ${data.name}</small>
-
-</div>
-
-`;
-
-});
+    });
 
 }
 
