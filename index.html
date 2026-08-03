@@ -6,12 +6,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>🚰 بلاغ ماء تطاوين</title>
+<title>بلاغ ماء تطاوين Pro</title>
 
-<link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -19,13 +23,9 @@
 
 <header class="hero">
 
-<div class="overlay">
-
 <h1>🚰 بلاغ ماء تطاوين</h1>
 
-<p>منصة للإبلاغ عن انقطاع الماء وعودة التزويد</p>
-
-</div>
+<p>منصة ذكية للإبلاغ عن انقطاع الماء والتسربات</p>
 
 </header>
 
@@ -33,11 +33,7 @@
 
 <div class="card">
 
-<h2>🚨 إرسال بلاغ جديد</h2>
-
-<p class="subtitle">
-املأ البيانات ثم اضغط على إرسال البلاغ
-</p>
+<h2>إرسال بلاغ</h2>
 
 <input
 id="name"
@@ -46,11 +42,15 @@ placeholder="الاسم">
 
 <select id="delegation">
 
+<option value="">اختر المعتمدية</option>
+
 <option>تطاوين الشمالية</option>
 
 <option>تطاوين الجنوبية</option>
 
 <option>غمراسن</option>
+
+<option>الصمار</option>
 
 <option>رمادة</option>
 
@@ -58,61 +58,68 @@ placeholder="الاسم">
 
 <option>البئر الأحمر</option>
 
-<option>الصمار</option>
+</select>
+
+<select id="type">
+
+<option>انقطاع ماء</option>
+
+<option>تسرب ماء</option>
+
+<option>كسر قناة</option>
+
+<option>ضعف ضغط</option>
+
+<option>عودة التزويد</option>
 
 </select>
 
 <textarea
 id="details"
-placeholder="اكتب تفاصيل البلاغ">
-</textarea>
-
-<label class="upload">
-
-📷 صورة البلاغ (اختياري)
+placeholder="اكتب تفاصيل البلاغ"></textarea>
 
 <input
-type="file"
 id="photo"
+type="file"
 accept="image/*">
 
-</label>
-
-<label class="upload">
-
-🎥 فيديو البلاغ (اختياري)
-
 <input
-type="file"
 id="video"
+type="file"
 accept="video/*">
 
-</label>
-
-<button onclick="sendReport()">
-
-🚀 إرسال البلاغ
-
-</button>
-
-</div>
 <div class="map-card">
 
-<h2>🗺️ موقع البلاغ</h2>
+<h3>📍 اختر مكان البلاغ</h3>
 
 <div id="map"></div>
 
 </div>
+
+<button onclick="sendReport()">
+
+إرسال البلاغ
+
+</button>
+
+</div>
+
 <h2 class="reports-title">
 
 📢 آخر البلاغات
 
 </h2>
 
-<div id="reports"></div>
+<div id="reports">
 
 </div>
+
+</div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script type="module" src="firebase.js"></script>
+
 <script type="module" src="app.js"></script>
 
 </body>
