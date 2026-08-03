@@ -10,7 +10,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyBJ1ayE2j6QcnhNkS-yJ8W3H7B3UpH5UHA",
   authDomain: "balagh-maa-tataouine.firebaseapp.com",
   projectId: "balagh-maa-tataouine",
   storageBucket: "balagh-maa-tataouine.firebasestorage.app",
