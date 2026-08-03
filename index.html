@@ -171,11 +171,15 @@ placeholder="اكتب البلاغ"></textarea>
 </label>
 
 <input type="file" id="video" accept="video/*">
-<button onclick="sendReport()">
+<<button onclick="sendReport()">
 🚀 إرسال البلاغ
 </button>
 
-</button>
+<h2>📢 آخر البلاغات</h2>
+
+<div id="reports"></div>
+
+
 
 <h2>
 
@@ -242,7 +246,11 @@ details:details,
 
 date: Date.now()
 
-});
+});<button onclick="getLocation()" style="background:#28a745">
+📍 تحديد موقعي الحالي
+</button>
+
+<p id="locationText">لم يتم تحديد الموقع بعد.</p>
 alert("تم إرسال البلاغ");
 
 loadReports();
@@ -280,7 +288,28 @@ reportsDiv.innerHTML+=`
 }
 
 loadReports();
+window.getLocation = function () {
 
+if (!navigator.geolocation) {
+    alert("الموقع غير مدعوم في هذا الجهاز.");
+    return;
+}
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+const lat = position.coords.latitude;
+const lng = position.coords.longitude;
+
+document.getElementById("locationText").innerHTML =
+"📍 " + lat + " , " + lng;
+
+}, function(){
+
+alert("يرجى السماح بالوصول إلى الموقع.");
+
+});
+
+}
 </script>
 
 </div>
