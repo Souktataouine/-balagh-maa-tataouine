@@ -6,16 +6,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>بلاغ ماء تطاوين Pro</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<title>🚰 بلاغ ماء تطاوين</title>
 
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 </head>
 
@@ -38,55 +35,35 @@
 <input
 id="name"
 type="text"
-placeholder="الاسم">
+placeholder="الاسم"
+/>
 
 <select id="delegation">
 
 <option value="">اختر المعتمدية</option>
 
 <option>تطاوين الشمالية</option>
-
 <option>تطاوين الجنوبية</option>
-
 <option>غمراسن</option>
-
-<option>الصمار</option>
-
-<option>رمادة</option>
-
-<option>ذهيبة</option>
-
 <option>البئر الأحمر</option>
+<option>رمادة</option>
+<option>ذهيبة</option>
+<option>الصمار</option>
 
 </select>
 
 <select id="type">
 
 <option>انقطاع ماء</option>
-
 <option>تسرب ماء</option>
-
-<option>كسر قناة</option>
-
-<option>ضعف ضغط</option>
-
-<option>عودة التزويد</option>
+<option>ضعف التزود</option>
+<option>عطب شبكة</option>
 
 </select>
 
 <textarea
 id="details"
 placeholder="اكتب تفاصيل البلاغ"></textarea>
-
-<input
-id="photo"
-type="file"
-accept="image/*">
-
-<input
-id="video"
-type="file"
-accept="video/*">
 
 <div class="map-card">
 
@@ -104,21 +81,21 @@ accept="video/*">
 
 </div>
 
-<h2 class="reports-title">
+<div class="card">
 
-📢 آخر البلاغات
-
-</h2>
+<h2>📢 آخر البلاغات</h2>
 
 <div id="reports">
 
+جاري التحميل...
+
+</div>
+
 </div>
 
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script type="module" src="firebase.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script type="module" src="app.js"></script>
 
