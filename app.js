@@ -13,140 +13,147 @@ import {
 let latitude = 32.93;
 let longitude = 10.45;
 
-// =========================
-// الخريطة
-// =========================
+// ===== الخريطة =====
 
 const map = L.map("map").setView([32.93, 10.45], 10);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
+  attribution: "© OpenStreetMap"
 }).addTo(map);
 
-const marker = L.marker([32.93,10.45]).addTo(map);
+const marker = L.marker([32.93, 10.45]).addTo(map);
 
-map.on("click", function(e){
-
-    marker.setLatLng(e.latlng);
-
-    latitude = e.latlng.lat;
-    longitude = e.latlng.lng;
-
+map.on("click", (e) => {
+  marker.setLatLng(e.latlng);
+  latitude = e.latlng.lat;
+  longitude = e.latlng.lng;
 });
 
-// =========================
-// إرسال البلاغ
-// =========================
+// ===== إرسال البلاغ =====
 
-window.sendReport = async function(){
+window.sendReport = async function () {
 
-    const name = document.getElementById("name").value.trim();
+  const name = document.getElementById("name").value.trim();
+  const delegation = document.getElementById("delegation").value;
+  const type = document.getElementById("type").value;
+  const details = document.getElementById("details").value.trim();
 
-    const delegation = document.getElementById("delegation").value;
+  if (!name || !details) {
+    alert("يرجى ملء جميع الخانات");
+    return;
+  }
 
-    const details = document.getElementById("details").value.trim();
+  await addDoc(collection(db, "reports"), {
+    name,
+    delegation,
+    type,
+    details,
+    latitude,
+    longitude,
+    date: Date.now()
+  });
 
-    if(name==="" || details===""){
+  alert("✅ تم إرسال البلاغ");
 
-        alert("يرجى ملء جميع الخانات");
+  document.getElementById("name").value = "";
+  document.getElementById("details").value = "";
 
-        return;
+  loadReports();
+};// ===== تحميل البلاغات =====
 
-    }
+async function loadReports() {
 
-    await addDoc(collection(db,"reports"),{
+  const reports = document.getElementById("reports");
 
-        name,
-        delegation,
-        details,
-        latitude,
-        longitude,
-        date:Date.now()
+  reports.innerHTML = "جاري التحميل...";
 
-    });
-
-    alert("✅ تم إرسال البلاغ");
-
-    document.getElementById("name").value="";
-    document.getElementById("details").value="";
-
-    loadReports();
-
-}
-// =========================
-// عرض البلاغات
-// =========================
-
-async function loadReports(){
-
-    const reports = document.getElementById("reports");
-
-    reports.innerHTML = "جاري التحميل...";
+  try {
 
     const q = query(
-        collection(db,"reports"),
-        orderBy("date","desc")
+      collection(db, "reports"),
+      orderBy("date", "desc")
     );
 
     const snap = await getDocs(q);
 
     reports.innerHTML = "";
 
-    snap.forEach((report)=>{
+    if (snap.empty) {
+      reports.innerHTML = "<p>لا توجد بلاغات.</p>";
+      return;
+    }
 
-        const data = report.data();
+    snap.forEach((report) => {
 
-        reports.innerHTML += `
-        <div class="report">
+      const data = report.data();
 
-            <h3>📍 ${data.delegation}</h3>
+      reports.innerHTML += `
+      <div class="report">
 
-            <p>${data.details}</p>
+        <h3>📍 ${data.delegation}</h3>
 
-            <small>👤 ${data.name}</small>
+        <p><strong>${data.type}</strong></p>
 
-            <br><br>
+        <p>${data.details}</p>
 
-            <button onclick="deleteReport('${report.id}')">
-                🗑️ حذف البلاغ
-            </button>
-window.deleteReport = async function(id){
+        <small>👤 ${data.name}</small>
+
+        <br><br>
+
+        <button onclick="deleteReport('${report.id}')">
+          🗑️ حذف البلاغ
+        </button>
+
+      </div>
+
+      <hr>
+      `;
+
+    });
+
+  } catch (e) {
+
+    console.error(e);
+
+    reports.innerHTML = "❌ حدث خطأ أثناء تحميل البلاغات.";
+
+  }
+// ===== حذف البلاغ =====
+
+window.deleteReport = async function(id) {
 
     const password = prompt("أدخل كلمة السر");
 
-    if(password !== "Tataouine2025"){
+    if (password !== "Tataouine2025") {
         alert("❌ كلمة السر غير صحيحة");
         return;
     }
 
     const ok = confirm("هل تريد حذف هذا البلاغ؟");
 
-    if(!ok){
+    if (!ok) {
         return;
     }
 
-    await deleteDoc(doc(db,"reports",id));
+    try {
 
-    alert("✅ تم حذف البلاغ");
+        await deleteDoc(doc(db, "reports", id));
 
-    loadReports();
+        alert("✅ تم حذف البلاغ");
 
-}
+        loadReports();
+
+    } catch (e) {
+
+        console.error(e);
+
+        alert("حدث خطأ أثناء الحذف");
+
+    }
+
+};
+
+// ===== تشغيل التطبيق =====
 
 loadReports();
-        </div>
-
-        <hr>
-        `;
-
-    });
-
 }
-
-window.deleteReport = async function(id){
-
-    const password = prompt("أدخل كلمة السر");
-
-    if(password !== "Tataouine2025"){
-
-        alert("❌ كلمة السر غير صحيحة
