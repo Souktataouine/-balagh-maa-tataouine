@@ -118,3 +118,10 @@ window.doneReport = async(id)=>{
 }
 
 loadReports();
+window.logout=function(){
+
+localStorage.removeItem("admin");
+
+window.location.href="login.html";
+
+}
