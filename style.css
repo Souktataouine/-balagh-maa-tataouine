@@ -81,7 +81,9 @@ resize:vertical;
 }
 
 .upload{
-display:block;
+    display:block;
+}
+
 .map-card{
     background:#fff;
     padding:20px;
