@@ -1,1 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>لوحة إدارة بلاغ ماء تطاوين</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+background:#eef5fb;
+font-family:'Cairo',sans-serif;
+}
+
+.admin-header{
+background:#0077cc;
+color:white;
+padding:25px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.box{
+background:white;
+padding:20px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.box h2{
+font-size:40px;
+color:#0077cc;
+}
+
+.box p{
+margin-top:10px;
+color:#666;
+}
+
+#reports{
+
+padding:20px;
+
+}
+
+.report{
+
+background:white;
+padding:20px;
+border-radius:20px;
+margin-bottom:20px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+}
+
+.report h3{
+
+color:#0077cc;
+margin-bottom:10px;
+
+}
+
+button{
+
+padding:12px 20px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+margin-top:15px;
+
+}
+
+.delete{
+
+background:#d32f2f;
+color:white;
+
+}
+
+.done{
+
+background:#2e7d32;
+color:white;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="admin-header">
+
+🚰 لوحة إدارة بلاغ ماء تطاوين
+
+</div>
+
+<div class="stats">
+
+<div class="box">
+
+<h2 id="totalReports">0</h2>
+
+<p>عدد البلاغات</p>
+
+</div>
+
+<div class="box">
+
+<h2 id="todayReports">0</h2>
+
+<p>بلاغات اليوم</p>
+
+</div>
+
+</div>
+
+<div id="reports">
+
+</div>
+
+<script type="module" src="admin.js"></script>
+
+</body>
+
+</html>
