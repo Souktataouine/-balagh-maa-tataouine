@@ -1,51 +1,208 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>بلاغ ماء تطاوين</title>
+
 <style>
+
 body{
-font-family:Arial,sans-serif;
-background:#eef7ff;
 margin:0;
-text-align:center;
+font-family:Arial;
+background:#eef7ff;
 }
+
 header{
 background:#0077cc;
 color:white;
 padding:20px;
+text-align:center;
 }
+
 .container{
 padding:20px;
+max-width:600px;
+margin:auto;
 }
+
+input,
+select,
+textarea,
 button{
-width:90%;
-max-width:350px;
-padding:15px;
-margin:10px;
+
+width:100%;
+padding:12px;
+margin-top:10px;
 font-size:18px;
-border:none;
-border-radius:10px;
-color:white;
-cursor:pointer;
+border-radius:8px;
+border:1px solid #ccc;
+
 }
-.red{background:#d9534f;}
-.blue{background:#0077cc;}
+
+button{
+
+background:#0077cc;
+color:white;
+border:none;
+
+}
+
+.report{
+
+background:white;
+padding:10px;
+margin-top:15px;
+border-radius:10px;
+
+}
+
 </style>
+
 </head>
+
 <body>
 
 <header>
+
 <h1>🚰 بلاغ ماء تطاوين</h1>
-<p>منصة للإبلاغ عن انقطاع الماء في ولاية تطاوين</p>
+
+<p>الإبلاغ عن انقطاع الماء وعودة التزويد</p>
+
 </header>
 
 <div class="container">
-<button class="red">🔴 الإبلاغ عن انقطاع الماء</button>
-<br>
-<button class="blue">📋 عرض البلاغات</button>
+
+<input id="name" placeholder="الاسم">
+
+<select id="delegation">
+
+<option>تطاوين الشمالية</option>
+<option>تطاوين الجنوبية</option>
+<option>غمراسن</option>
+<option>رمادة</option>
+<option>ذهيبة</option>
+<option>البئر الأحمر</option>
+<option>الصمار</option>
+
+</select>
+
+<textarea id="details"
+placeholder="اكتب البلاغ"></textarea>
+
+<button onclick="sendReport()">
+
+إرسال البلاغ
+
+</button>
+
+<h2>
+
+آخر البلاغات
+
+</h2>
+
+<div id="reports"></div>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+addDoc,
+getDocs,
+query,
+orderBy
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBJ1ayE2j6QcnhNkS-yJ8W3H7B3UpH5UHA",
+  authDomain: "balagh-maa-tataouine.firebaseapp.com",
+  projectId: "balagh-maa-tataouine",
+  storageBucket: "balagh-maa-tataouine.firebasestorage.app",
+  messagingSenderId: "511775432495",
+  appId: "1:511775432495:web:a8c440db80eba59dd40bda",
+  measurementId: "G-ZYNNL1XLC3"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const db = getFirestore(app);
+
+window.sendReport = async function(){
+
+let name=document.getElementById("name").value;
+
+let delegation=document.getElementById("delegation").value;
+
+let details=document.getElementById("details").value;
+
+if(name=="" || details==""){
+
+alert("يرجى ملء جميع الخانات");
+
+return;
+
+}
+
+await addDoc(collection(db,"reports"),{
+
+name:name,
+
+delegation:delegation,
+
+details:details,
+
+date:Date.now()
+
+});
+
+alert("تم إرسال البلاغ");
+
+loadReports(); async function loadReports(){
+
+const reportsDiv=document.getElementById("reports");
+
+reportsDiv.innerHTML="";
+
+const q=query(collection(db,"reports"),orderBy("date","desc"));
+
+const snapshot=await getDocs(q);
+
+snapshot.forEach((doc)=>{
+
+const data=doc.data();
+
+reportsDiv.innerHTML+=`
+
+<div class="report">
+
+<h3>📍 ${data.delegation}</h3>
+
+<p>${data.details}</p>
+
+<small>👤 ${data.name}</small>
+
+</div>
+
+`;
+
+});
+
+}
+
+loadReports();
+
+</script>
+
 </div>
 
 </body>
+
 </html>
+
+}
