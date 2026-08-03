@@ -110,7 +110,30 @@ async function loadReports(){
             <button onclick="deleteReport('${report.id}')">
                 🗑️ حذف البلاغ
             </button>
+window.deleteReport = async function(id){
 
+    const password = prompt("أدخل كلمة السر");
+
+    if(password !== "Tataouine2025"){
+        alert("❌ كلمة السر غير صحيحة");
+        return;
+    }
+
+    const ok = confirm("هل تريد حذف هذا البلاغ؟");
+
+    if(!ok){
+        return;
+    }
+
+    await deleteDoc(doc(db,"reports",id));
+
+    alert("✅ تم حذف البلاغ");
+
+    loadReports();
+
+}
+
+loadReports();
         </div>
 
         <hr>
