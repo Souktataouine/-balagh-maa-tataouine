@@ -21,6 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// إرسال البلاغ
 window.sendReport = async () => {
 
     const name = document.getElementById("name").value.trim();
@@ -57,48 +58,30 @@ window.sendReport = async () => {
 
 };
 
+// تحميل البلاغات
 async function loadReports() {
 
     const reports = document.getElementById("reports");
 
-    reports.innerHTML = "جاري التحميل...";
+    try {
 
-    const q = query(
-        collection(db, "reports"),
-        orderBy("date", "desc")
-    );
+        reports.innerHTML = "جاري التحميل...";
 
-    const snap = await getDocs(q);
+        const q = query(
+            collection(db, "reports"),
+            orderBy("date", "desc")
+        );
 
-    reports.innerHTML = "";
+        const snap = await getDocs(q);
 
-    snap.forEach(doc => {
+        reports.innerHTML = "";
 
-        const data = doc.data();
+        snap.forEach(doc => {
 
-        reports.innerHTML += `
-        <div class="report">
-            <h3>📍 ${data.delegation}</h3>
-            <p>${data.details}</p>
-            <small>👤 ${data.name}</small>
-        </div>
-        `;
+            const data = doc.data();
 
-    });
-
-}
-
-loadReports();
-
-alert("JavaScript يعمل");
-const map = L.map('map').setView([32.93,10.45],10);
-
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-}).addTo(map);
-
-let marker = L.marker([32.93,10.45]).addTo(map);
-
-map.on("click", function(e) {
-    marker.setLatLng(e.latlng);
-});
+            reports.innerHTML += `
+                <div class="report">
+                    <h3>📍 ${data.delegation}</h3>
+                    <p>${data.details}</p>
+                    <small>👤 ${data.name}</
