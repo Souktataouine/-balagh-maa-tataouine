@@ -89,6 +89,8 @@ async function loadReports() {
 }
 
 loadReports();
+
+alert("JavaScript يعمل");
 const map = L.map('map').setView([32.93,10.45],10);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
