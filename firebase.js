@@ -4,28 +4,22 @@ import {
     getFirestore
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-    getStorage
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
 const firebaseConfig = {
 
-    apiKey: "ضع API KEY هنا",
+    apiKey: "AIzaSyBJ1ayE2j6QcnhNkS-yJ8W3H7B3UpH5UHA",
 
-    authDomain: "ضع Auth Domain هنا",
+    authDomain: "balagh-maa-tataouine.firebaseapp.com",
 
-    projectId: "ضع Project ID هنا",
+    projectId: "balagh-maa-tataouine",
 
-    storageBucket: "ضع Storage Bucket هنا",
+    storageBucket: "balagh-maa-tataouine.firebasestorage.app",
 
-    messagingSenderId: "ضع Sender ID هنا",
+    messagingSenderId: "511775432495",
 
-    appId: "ضع App ID هنا"
+    appId: "1:511775432495:web:a8c440db80eba59dd40bda"
 
 };
 
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
-
-export const storage = getStorage(app);
