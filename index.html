@@ -2,135 +2,29 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>بلاغ ماء تطاوين</title>
+<title>🚰 بلاغ ماء تطاوين</title>
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+<link rel="stylesheet" href="style.css">
 
-body{
-background:#edf5ff;
-}
-
-header{
-background:linear-gradient(135deg,#0056b3,#0099ff);
-color:white;
-padding:40px 20px;
-text-align:center;
-border-bottom-left-radius:30px;
-border-bottom-right-radius:30px;
-box-shadow:0 5px 20px rgba(0,0,0,.2);
-}
-
-header h1{
-font-size:34px;
-margin-bottom:10px;
-}
-
-header p{
-font-size:18px;
-opacity:.9;
-}
-
-.container{
-max-width:700px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-background:white;
-border-radius:20px;
-padding:20px;
-margin-bottom:20px;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-}
-
-input,
-select,
-textarea{
-width:100%;
-padding:15px;
-margin-top:12px;
-border-radius:12px;
-border:1px solid #ddd;
-font-size:17px;
-background:#fafafa;
-}
-
-textarea{
-height:130px;
-resize:none;
-}
-
-button{
-width:100%;
-padding:16px;
-margin-top:15px;
-background:#0077ff;
-color:white;
-border:none;
-border-radius:14px;
-font-size:20px;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-}
-
-button:hover{
-background:#005ecc;
-}
-
-.report{
-background:white;
-padding:18px;
-margin-top:15px;
-border-radius:18px;
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-border-right:6px solid #0077ff;
-}
-
-.report h3{
-color:#0077ff;
-margin-bottom:8px;
-}
-
-.report p{
-font-size:17px;
-margin-bottom:8px;
-}
-
-small{
-color:#666;
-}
-
-h2{
-margin:25px 0 15px;
-color:#003366;
-}
-
-
-
-
-
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 </head>
 
 <body>
 
-<header>
+<header class="hero">
+
+<div class="overlay">
 
 <h1>🚰 بلاغ ماء تطاوين</h1>
 
-<p>الإبلاغ عن انقطاع الماء وعودة التزويد</p>
+<p>منصة للإبلاغ عن انقطاع الماء وعودة التزويد</p>
+
+</div>
 
 </header>
 
@@ -140,182 +34,80 @@ color:#003366;
 
 <h2>🚨 إرسال بلاغ جديد</h2>
 
-<p style="color:#666;margin-bottom:15px">
+<p class="subtitle">
 املأ البيانات ثم اضغط على إرسال البلاغ
 </p>
 
-<input id="name" placeholder="الاسم">
+<input
+id="name"
+type="text"
+placeholder="الاسم">
 
 <select id="delegation">
 
 <option>تطاوين الشمالية</option>
+
 <option>تطاوين الجنوبية</option>
+
 <option>غمراسن</option>
+
 <option>رمادة</option>
+
 <option>ذهيبة</option>
+
 <option>البئر الأحمر</option>
+
 <option>الصمار</option>
 
 </select>
 
-<textarea id="details"
-placeholder="اكتب البلاغ"></textarea>
-<label style="display:block;margin-top:15px;font-weight:bold">
+<textarea
+id="details"
+placeholder="اكتب تفاصيل البلاغ">
+</textarea>
+
+<label class="upload">
+
 📷 صورة البلاغ (اختياري)
+
+<input
+type="file"
+id="photo"
+accept="image/*">
+
 </label>
 
-<input type="file" id="photo" accept="image/*">
+<label class="upload">
 
-<label style="display:block;margin-top:15px;font-weight:bold">
-📹 فيديو البلاغ (اختياري)
+🎥 فيديو البلاغ (اختياري)
+
+<input
+type="file"
+id="video"
+accept="video/*">
+
 </label>
 
-<input type="file" id="video" accept="video/*">
-<<button onclick="sendReport()">
+<button onclick="sendReport()">
+
 🚀 إرسال البلاغ
+
 </button>
 
-<h2>📢 آخر البلاغات</h2>
+</div>
 
-<div id="reports"></div>
+<h2 class="reports-title">
 
-
-
-<h2>
-
-آخر البلاغات
+📢 آخر البلاغات
 
 </h2>
 
-</div>
-
-<h2>📢 آخر البلاغات</h2>
-
 <div id="reports"></div>
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-query,
-orderBy
-}j
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBJ1ayE2j6QcnhNkS-yJ8W3H7B3UpH5UHA",
-  authDomain: "balagh-maa-tataouine.firebaseapp.com",
-  projectId: "balagh-maa-tataouine",
-  storageBucket: "balagh-maa-tataouine.firebasestorage.app",
-  messagingSenderId: "511775432495",
-  appId: "1:511775432495:web:a8c440db80eba59dd40bda",
-  measurementId: "G-ZYNNL1XLC3"
-};
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-window.sendReport = async function(){
-
-let name=document.getElementById("name").value;
-
-let delegation=document.getElementById("delegation").value;
-
-let details=document.getElementById("details").value;
-
-if(name=="" || details==""){
-
-alert("يرجى ملء جميع الخانات");
-
-return;
-
-}
-
-await addDoc(collection(db,"reports"),{
-
-name:name,
-
-delegation:delegation,
-
-details:details,
-
-date: Date.now()
-
-});<button onclick="getLocation()" style="background:#28a745">
-📍 تحديد موقعي الحالي
-</button>
-
-<p id="locationText">لم يتم تحديد الموقع بعد.</p>
-alert("تم إرسال البلاغ");
-
-loadReports();
-
-async function loadReports() {
-
-const reportsDiv = document.getElementById("reports");
-
-reportsDiv.innerHTML="";
-
-const q=query(collection(db,"reports"),orderBy("date","desc"));
-
-const snapshot=await getDocs(q);
-
-snapshot.forEach((doc)=>{
-
-const data=doc.data();
-
-reportsDiv.innerHTML+=`
-
-<div class="report">
-
-<h3>📍 ${data.delegation}</h3>
-
-<p>${data.details}</p>
-
-<small>👤 ${data.name}</small>
 
 </div>
 
-`;
-
-});
-
-}
-
-loadReports();
-window.getLocation = function () {
-
-if (!navigator.geolocation) {
-    alert("الموقع غير مدعوم في هذا الجهاز.");
-    return;
-}
-
-navigator.geolocation.getCurrentPosition(function(position){
-
-const lat = position.coords.latitude;
-const lng = position.coords.longitude;
-
-document.getElementById("locationText").innerHTML =
-"📍 " + lat + " , " + lng;
-
-}, function(){
-
-alert("يرجى السماح بالوصول إلى الموقع.");
-
-});
-
-}
-</script>
-
-</div>
+<script type="module" src="app.js"></script>
 
 </body>
 
 </html>
-
-
