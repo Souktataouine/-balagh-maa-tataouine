@@ -89,3 +89,14 @@ async function loadReports() {
 }
 
 loadReports();
+const map = L.map('map').setView([32.93,10.45],10);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+let marker = L.marker([32.93,10.45]).addTo(map);
+
+map.on("click", function(e) {
+    marker.setLatLng(e.latlng);
+});
