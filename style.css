@@ -82,3 +82,17 @@ resize:vertical;
 
 .upload{
 display:block;
+.map-card{
+    background:#fff;
+    padding:20px;
+    margin-top:25px;
+    border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+#map{
+    height:350px;
+    width:100%;
+    border-radius:15px;
+    overflow:hidden;
+}
