@@ -133,7 +133,9 @@ async function loadReports() {
 
         console.error(e);
 
-        reports.innerHTML = "❌ " + e.message;
+alert(e.message);
+
+reports.innerHTML = "❌ " + e.message;
 
     }// ======================
 // حذف البلاغ
