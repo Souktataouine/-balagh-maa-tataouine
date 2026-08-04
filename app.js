@@ -4,8 +4,6 @@ import {
   collection,
   addDoc,
   getDocs,
-  query,
-  orderBy,
   deleteDoc,
   doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -21,17 +19,20 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap"
 }).addTo(map);
 
-const marker = L.marker([32.93, 10.45]).addTo(map);
+const marker = L.marker([latitude, longitude]).addTo(map);
 
 map.on("click", (e) => {
-  marker.setLatLng(e.latlng);
+
   latitude = e.latlng.lat;
   longitude = e.latlng.lng;
+
+  marker.setLatLng(e.latlng);
+
 });
 
 // ===== إرسال البلاغ =====
 
-window.sendReport = async function () {
+window.sendReport = async () => {
 
   const name = document.getElementById("name").value.trim();
   const delegation = document.getElementById("delegation").value;
@@ -44,6 +45,7 @@ window.sendReport = async function () {
   }
 
   await addDoc(collection(db, "reports"), {
+
     name,
     delegation,
     type,
@@ -51,99 +53,121 @@ window.sendReport = async function () {
     latitude,
     longitude,
     date: Date.now()
+
   });
 
-  alert("✅ تم إرسال البلاغ");
+  alert("تم إرسال البلاغ");
 
   document.getElementById("name").value = "";
   document.getElementById("details").value = "";
 
   loadReports();
-};// ===== تحميل البلاغات =====
+
+};
+// ======================
+// تحميل البلاغات
+// ======================
 
 async function loadReports() {
 
-  const reports = document.getElementById("reports");
+    const reports = document.getElementById("reports");
 
-  reports.innerHTML = "جاري التحميل...";
+    reports.innerHTML = "جاري التحميل...";
 
-  try {
+    try {
 
-    const q = query(
-      collection(db, "reports"),
-      orderBy("date", "desc")
-    );
+        const snap = await getDocs(collection(db, "reports"));
 
-    const snap = await getDocs(q);
+        reports.innerHTML = "";
 
-    reports.innerHTML = "";
+        if (snap.empty) {
 
-    if (snap.empty) {
-      reports.innerHTML = "<p>لا توجد بلاغات.</p>";
-      return;
-    }
+            reports.innerHTML = "<p>لا توجد بلاغات حتى الآن.</p>";
+            return;
 
-    snap.forEach((report) => {
+        }
 
-      const data = report.data();
+        snap.forEach((report) => {
 
-      reports.innerHTML += `
-      <div class="report">
+            const data = report.data();
 
-        <h3>📍 ${data.delegation}</h3>
+            reports.innerHTML += `
 
-        <p><strong>${data.type}</strong></p>
+            <div class="report">
 
-        <p>${data.details}</p>
+                <h3>📍 ${data.delegation}</h3>
 
-        <small>👤 ${data.name}</small>
+                <p><strong>${data.type || ""}</strong></p>
 
-        <br><br>
+                <p>${data.details}</p>
 
-        <button onclick="deleteReport('${report.id}')">
-          🗑️ حذف البلاغ
-        </button>
+                <small>👤 ${data.name}</small>
 
-      </div>
+                <br><br>
 
-      <hr>
-      `;
+                <button onclick="deleteReport('${report.id}')">
 
-    });
+                    🗑 حذف البلاغ
 
-  } catch (e) {
+                </button>
 
-    console.error(e);
+            </div>
 
-    reports.innerHTML = "❌ حدث خطأ أثناء تحميل البلاغات.";
+            `;
 
-  }
-// ===== حذف البلاغ =====
+            if (data.latitude && data.longitude) {
 
-window.deleteReport = async function(id) {
+                L.marker([data.latitude, data.longitude])
+                    .addTo(map)
+                    .bindPopup(`
+                        <b>${data.delegation}</b><br>
+                        ${data.details}<br>
+                        👤 ${data.name}
+                    `);
+
+            }
+
+        });
+
+    } catch (e) {
+
+        console.error(e);
+
+        reports.innerHTML = "❌ " + e.message;
+
+    }// ======================
+// حذف البلاغ
+// ======================
+
+window.deleteReport = async function(id){
 
     const password = prompt("أدخل كلمة السر");
 
-    if (password !== "Tataouine2025") {
+    if(password !== "Tataouine2025"){
+
         alert("❌ كلمة السر غير صحيحة");
+
         return;
+
     }
 
     const ok = confirm("هل تريد حذف هذا البلاغ؟");
 
-    if (!ok) {
+    if(!ok){
+
         return;
+
     }
 
-    try {
+    try{
 
-        await deleteDoc(doc(db, "reports", id));
+        await deleteDoc(doc(db,"reports",id));
 
         alert("✅ تم حذف البلاغ");
 
         loadReports();
 
-    } catch (e) {
+    }catch(e){
 
         console.error(e);
 
@@ -153,7 +177,10 @@ window.deleteReport = async function(id) {
 
 };
 
-// ===== تشغيل التطبيق =====
+// ======================
+// تشغيل التطبيق
+// ======================
 
 loadReports();
+
 }
