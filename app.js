@@ -1,5 +1,5 @@
 import { db } from "./firebase.js";
-
+alert("بدأ تشغيل app.js");
 import {
   collection,
   addDoc,
