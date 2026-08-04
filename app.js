@@ -76,8 +76,12 @@ async function loadReports() {
 
     try {
     alert("دخل إلى try");
-        const snap = await getDocs(collection(db, "reports"));
-alert("عدد البلاغات: " + snap.size);
+
+    alert("قبل getDocs");
+    const snap = await getDocs(collection(db, "reports"));
+    alert("بعد getDocs");
+
+    alert("عدد البلاغات: " + snap.size);
         reports.innerHTML = "";
 
         if (snap.empty) {
@@ -184,5 +188,3 @@ window.deleteReport = async function(id){
 // ======================
 
 loadReports();
-
-}
