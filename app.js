@@ -75,7 +75,7 @@ async function loadReports() {
     reports.innerHTML = "جاري التحميل...";
 
     try {
-
+    alert("دخل إلى try");
         const snap = await getDocs(collection(db, "reports"));
 alert("عدد البلاغات: " + snap.size);
         reports.innerHTML = "";
