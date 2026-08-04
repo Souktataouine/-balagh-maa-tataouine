@@ -1,5 +1,5 @@
 import { db } from "./firebase.js";
-alert("بدأ تشغيل app.js");
+
 import {
   collection,
   addDoc,
@@ -7,7 +7,7 @@ import {
   deleteDoc,
   doc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+alert("بدأ تشغيل app.js");
 let latitude = 32.93;
 let longitude = 10.45;
 
