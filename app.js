@@ -77,7 +77,7 @@ async function loadReports() {
     try {
 
         const snap = await getDocs(collection(db, "reports"));
-
+alert("عدد البلاغات: " + snap.size);
         reports.innerHTML = "";
 
         if (snap.empty) {
